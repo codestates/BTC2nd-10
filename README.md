@@ -1,6 +1,6 @@
 
 
-![avalanciaga](https://user-images.githubusercontent.com/67456294/167545880-693e3e59-b6ff-4fd9-83a0-b5f7d74d4649.png)
+![avalanciaga](https://user-images.githubusercontent.com/67456294/167548446-71920d89-9692-4a44-b3ba-6259d5582070.png)
 
 
 #### 🎈 네트워크 : 아발란체(Avalanche)
