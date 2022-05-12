@@ -21,6 +21,7 @@ const getNewTxs = async (start_block, currentBlockNumber) => {
         return Promise.all(txs);
     } catch (e) {
         console.log(e.message);
+        return null
     }
 };
 const notify_to_mid_sever = async (tx) => {

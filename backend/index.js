@@ -36,24 +36,26 @@ const cron_job = cron.schedule(
             }
 
             const txs = await getNewTxs(syncFrom, currentBlockNumber);
-            const works = [];
-            for (let tx of txs) {
-                works.push(notify_to_mid_sever(tx));
-            }
+            if(txs != null){
+                const works = [];
+                for (let tx of txs) {
+                    works.push(notify_to_mid_sever(tx));
+                }
 
-            if (works.length > 0) {
-                Promise.all(works).then(() => {
-                    if (currentBlockNumber >= syncFrom) {
-                        console.log(`Cronjob done. block hegight ${syncFrom} ~ ${currentBlockNumber} ====`);
-                        fs.writeFileSync(
-                            path.join(basePath, "./block_height"),
-                            String(currentBlockNumber)
-                        );
-                        wait_for_prev_job = false;
-                    }
-                }).catch(error => {
-                    console.error(error.message)
-                });
+                if (works.length > 0) {
+                    Promise.all(works).then(() => {
+                        if (currentBlockNumber >= syncFrom) {
+                            console.log(`Cronjob done. block hegight ${syncFrom} ~ ${currentBlockNumber} ====`);
+                            fs.writeFileSync(
+                                path.join(basePath, "./block_height"),
+                                String(currentBlockNumber)
+                            );
+                            wait_for_prev_job = false;
+                        }
+                    }).catch(error => {
+                        console.error(error.message)
+                    });
+                }
             }
             wait_for_prev_job = false;
         } catch (e) {
