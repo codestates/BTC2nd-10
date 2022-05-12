@@ -41,7 +41,18 @@ const getToken = (user) => {
   return jwt.sign({ address: user.address }, "12234");
 };
 //--------------------------------------------------------------------
-
+const sendTransaction = async (to,from, pk, amount,req) => {
+  let tx = {
+    from,
+    to,
+    value: req.web3.utils.toWei(amount, "ether"),
+    gas: 22000,
+  };
+  console.log(tx)
+  await req.web3.eth.accounts.privateKeyToAccount(pk);
+  const signedTx = await req.web3.eth.accounts.signTransaction(tx, pk);
+  return await req.web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+};
 //--------------------------------------------------------------------
 
 module.exports = {
@@ -79,5 +90,35 @@ module.exports = {
     return res.status(200).json({    
         "balance": `${resBalance}`,
     });
-  }
+  },
+  transfer: async (req, res) => {
+    try {
+      const { to, from, amount ,pk } = req.body;
+      console.log(`to ${to}  \n ${from} \n ${amount} , \n ${pk}`)
+      const result = await sendTransaction(
+        to,
+        from,
+        pk,
+        amount,
+        req
+      );
+      if (result?.status !== null) {
+        if (result.status) {
+          res.status(200).json({ 
+            message: "success" 
+          });
+        } else {
+          res.status(400).json({
+             message: "fail" 
+          });
+        }
+      }
+    } catch (e) {
+      console.log(e);
+      res.status(404).send({
+        message: "server error",
+        errMsg: e,
+      });
+    }
+  },  
 };

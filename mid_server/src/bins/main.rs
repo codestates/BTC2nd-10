@@ -2,7 +2,7 @@
 extern crate rocket;
 use mid_server::endpoints::endpoint::{
     my_wallet, transaction_get, transaction_get_from, transaction_get_to, transaction_post,
-    user_create, user_get,
+    transfer, user_create, user_get,
 };
 use mid_server::indexer::actor::Indexer;
 use mid_server::models::message::ManagedState;
@@ -35,6 +35,6 @@ fn rocket() -> _ {
                 transaction_get_to
             ],
         )
-        .mount("/user", routes![user_create, user_get, my_wallet])
+        .mount("/user", routes![user_create, user_get, my_wallet, transfer])
         .manage(managed)
 }

@@ -91,6 +91,33 @@ pub struct SaveUser {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Transfer {
+    pub from: String,
+    pub to: String,
+    pub amount: String,
+}
+impl Transfer {
+    pub fn json_to_struct(json_data: Json<Transfer>) -> Self {
+        Self {
+            from: json_data.from.clone(),
+            to: json_data.to.clone(),
+            amount: json_data.amount.clone(),
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TransferResponse {
+    pub message: String,
+}
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TransferInternal {
+    pub from: String,
+    pub to: String,
+    pub pk: String,
+    pub amount: String,
+}
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Transaction {
     pub block_hash: String,

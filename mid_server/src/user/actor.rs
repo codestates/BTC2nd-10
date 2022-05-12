@@ -7,8 +7,8 @@ use std::collections::{HashMap, HashSet};
 use crate::envs::env::WALLET_SERVER;
 use crate::models::message::{
     BalanceResponse, ClientUser, ErrorResponse, ErrorTypes, GetMyResponse, GetUserResponse,
-    IndexerMessage, RestErrorResponses, SaveUser, SuccessResponse, Transaction, UserCreate,
-    UserCreateResponse, UserMessage,
+    IndexerMessage, RestErrorResponses, SaveUser, SuccessResponse, Transaction, Transfer,
+    TransferInternal, TransferResponse, UserCreate, UserCreateResponse, UserMessage,
 };
 
 pub struct UserActor {
@@ -260,6 +260,87 @@ pub async fn get_my(
                                             },
                                             Err(_) => todo!(),
                                         }
+                                    }
+                                    Err(msg) => {
+                                        println!("parsing failed");
+                                        let error =
+                                            ErrorResponse::create_error(ErrorTypes::StandardError(
+                                                format!("error msg: {}", msg),
+                                            ));
+                                        return Err(error);
+                                    }
+                                }
+                            } else {
+                                println!("Fail to get response, {:#?}", res.status());
+                                let error = ErrorResponse::create_error(ErrorTypes::StandardError(
+                                    format!("error msg: {}", res.status()),
+                                ));
+                                return Err(error);
+                            }
+                        }
+                        Err(e) => {
+                            println!("Fail to send message {}", e);
+                            let error = ErrorResponse::create_error(ErrorTypes::StandardError(
+                                format!("error msg: {}", e),
+                            ));
+                            return Err(error);
+                        }
+                    }
+                } else {
+                    todo!()
+                }
+            }
+        },
+        Err(e) => todo!(),
+    }
+}
+
+pub async fn transfer_handle(
+    transfer: Transfer,
+    tx_user: UnboundedSender<UserMessage>,
+    tx_indexer: UnboundedSender<IndexerMessage>,
+) -> Result<Json<SuccessResponse<TransferResponse>>, RestErrorResponses> {
+    let (tx_oneshot, rx_oneshot) = oneshot::channel::<UserMessage>();
+    tx_user
+        .send(UserMessage::GetUserFromAccess((
+            tx_oneshot,
+            transfer.from.clone(),
+        )))
+        .unwrap();
+    match rx_oneshot.await {
+        Ok(val) => match val {
+            UserMessage::GetUserFromAccess(_) => todo!(),
+            UserMessage::NewUserCreated(_) => todo!(),
+            UserMessage::GetUser(_) => todo!(),
+            UserMessage::GetUserResponse(data) => {
+                if let Some(user) = data {
+                    println!("1");
+                    let url = format!("{}/user/transfer", WALLET_SERVER.as_str());
+                    let mut headers = reqwest::header::HeaderMap::new();
+                    headers.insert(
+                        reqwest::header::ACCEPT,
+                        reqwest::header::HeaderValue::from_static("Application/json"),
+                    );
+                    let client = reqwest::Client::builder()
+                        .default_headers(headers)
+                        .build()
+                        .unwrap();
+                    let internal_data = TransferInternal {
+                        from: user.address,
+                        to: transfer.to,
+                        pk: user.pk,
+                        amount: transfer.amount,
+                    };
+                    println!("2 sending : {:?}", internal_data);
+                    let response = client.post(url).json(&internal_data).send().await;
+                    println!("2 : {:?}", response);
+                    match response {
+                        Ok(res) => {
+                            if res.status() == 200 {
+                                match res.json::<TransferResponse>().await {
+                                    Ok(parsed) => {
+                                        println!("parsed :{:?}", parsed);
+                                        Ok(Json(SuccessResponse { data: parsed }))
                                     }
                                     Err(msg) => {
                                         println!("parsing failed");

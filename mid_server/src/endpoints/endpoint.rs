@@ -4,9 +4,10 @@ use rocket::{get, post, tokio, State};
 
 use crate::models::message::{
     ClientUser, ErrorResponse, ErrorTypes, GetMyResponse, GetUserResponse, IndexerMessage,
-    ManagedState, RestErrorResponses, SuccessResponse, Transaction, UserCreate,
+    ManagedState, RestErrorResponses, SuccessResponse, Transaction, Transfer, TransferResponse,
+    UserCreate,
 };
-use crate::user::actor::{create_user, get_my, get_user};
+use crate::user::actor::{create_user, get_my, get_user, transfer_handle};
 
 #[post("/", format = "json", data = "<body>")]
 pub async fn transaction_post(
@@ -179,4 +180,30 @@ pub async fn my_wallet(
     ))
     .await
     .unwrap()
+}
+
+#[post("/transfer", format = "json", data = "<body>")]
+pub async fn transfer(
+    state: &State<ManagedState>,
+    body: Option<Json<Transfer>>,
+) -> Result<Json<SuccessResponse<TransferResponse>>, RestErrorResponses> {
+    match body {
+        Some(data) => {
+            let main_data = Transfer::json_to_struct(data);
+            log::debug!("hi TRANSFER, {}", main_data.from);
+            return tokio::spawn(transfer_handle(
+                main_data,
+                state.tx_user.clone(),
+                state.tx_indexer.clone(),
+            ))
+            .await
+            .unwrap();
+        }
+        None => {
+            println!("Fail to send message ");
+            let error =
+                ErrorResponse::create_error(ErrorTypes::StandardError(format!("error msg: ")));
+            return Err(error);
+        }
+    }
 }
