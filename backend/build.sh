@@ -1,0 +1,1 @@
+docker build -t btc_aval_test . 
