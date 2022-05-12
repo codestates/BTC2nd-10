@@ -50,8 +50,8 @@ html, body {
     border-radius: 20px;
 }
 #create_wallet > div:last-child {
-    width: 100%;
-    display: flex;
+    display: none;
+    width: 500px;
     flex-direction: column;
     align-items: center;
 }
@@ -59,6 +59,6 @@ html, body {
     font-size: 25px;
     font-weight: bold;
 }
-#create_wallet > div:last-child > span {
+#create_wallet > div:last-child > div {
     color: red;
 }

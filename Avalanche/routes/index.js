@@ -13,33 +13,24 @@ router.get('/wallet', function(req, res, next) {
 });
 
 router.get('/transaction',async function (req,res,next){
-  await axios.get('http://localhost:8000/transaction').then((Response)=>{
+  await axios.get('http://172.30.1.40:8000/transaction').then((Response)=>{
     res.send({data: JSON.stringify(Response.data)});
   }).catch((Error)=>{
     console.log(Error);
   })
 })
 
-router.post('/wallet', function(req, res, next) {
+router.post('/wallet', async function(req, res, next) {
   // Create a new wallet
-  let newMnemonic = MnemonicWallet.generateMnemonicPhrase()
-  let myWallet = MnemonicWallet.fromMnemonic(newMnemonic)
-
-  let addressX = myWallet.getAddressX()
-  let addressP = myWallet.getAddressP()
-  let addressC = myWallet.getAddressC()
-
-  console.log(newMnemonic,
-      myWallet,
-      addressX,
-      addressP,
-      addressC,
-  )
-  res.send({newMnemonic,
-    myWallet,
-    addressX,
-    addressP,
-    addressC})
+  await axios({
+    method: 'post',
+    url: 'http://172.30.1.40:8000/user',
+    data: req.body
+  }).then(function (response) {
+        let { data } = response;
+        res.send(data.data);
+        // console.log(response);
+  })
 });
 
 module.exports = router;

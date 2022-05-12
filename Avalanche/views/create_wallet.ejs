@@ -7,22 +7,28 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel='stylesheet' href='/stylesheets/create_wallet.css' />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="/javascripts/create_wallet.js"></script>
     <title>지갑 생성</title>
 </head>
 <body>
 <div id="create_wallet">
     <div>
         <i class="fa-solid fa-w fa-5x"></i>
-        <label>암호 생성</label>
+        <label>지갑 생성</label>
     </div>
     <div>
-        <input type="password" placeholder="Password"/>
-        <input type="password" placeholder="Password 확인"/>
-        <button>생성</button>
+        <input id="pw" type="password" placeholder="Password"/>
+        <input id="check_pw" type="password" placeholder="Password 확인"/>
+        <button id="wll_create">생성</button>
     </div>
     <div>
+        <label>Address</label>
+        <div id="address"></div>
         <label>PK 정보</label>
-        <span>sdkjfwofjoiewnvioiusdfnmoewjfoiwej</span>
+        <div id="primary_key"></div>
+        <label>Access Token</label>
+        <div id="access_token"></div>
     </div>
 </div>
 </body>
