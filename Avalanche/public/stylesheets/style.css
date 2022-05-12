@@ -1,0 +1,201 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  background-color: black;
+  min-width: 1300px;
+  overflow: auto;
+  position: relative;
+}
+header {
+  width: 100%;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+header > div {
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 1300px;
+}
+header > div > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo {
+  width: 40px;
+  height: 40px;
+}
+.logo + label {
+  font-weight: bold;
+  font-size: large;
+}
+.content{
+  width: 100%;
+  height: calc(100% - 56px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wallet {
+  cursor: pointer;
+}
+.modal {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal_background {
+  background-color: #4a4a4a;
+  opacity: 0.5;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+.modal_content {
+  width: 600px;
+  height: 800px;
+  background-color: white;
+  z-index: 20;
+}
+.modal_content_body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+  gap: 10px;
+}
+.modal_content_body > div {
+  width: 100%;
+  height: calc(50% - 5px);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid black;
+  border-radius: 16px;
+  cursor: pointer;
+}
+.modal_content_body > div > div {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.transaction {
+  width: 1300px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 56px;
+  padding-bottom: 56px;
+  box-sizing: border-box;
+  gap: 16px;
+}
+.transaction > ul {
+  width: 100%;
+  margin: 0;
+  padding: 10px;
+  box-sizing: border-box;
+  list-style: none;
+  border-radius: 8px;
+  background-color: rgb(26,26,28);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 50px;
+  /*height: calc(100% - 72px);*/
+  overflow: auto;
+}
+.transaction > ul > li {
+  display: flex;
+  justify-content: space-evenly;
+}
+.transaction > ul > li > div:first-child {
+  border-radius: 50%;
+  background-color: rgb(58,58,60);
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+.transaction > ul > li > div:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.transaction > ul > li > div:nth-child(2) > label {
+  color: rgb(106, 192, 255);
+}
+.transaction > ul > li > div:nth-child(2) > span {
+  font-size: 8px;
+}
+.transaction > ul > li > div:nth-child(3) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.transaction > ul > li > div:nth-child(3) > label {
+  color: rgb(106, 192, 255);
+}
+.transaction > ul > li > div:nth-child(3) > label > span {
+  font-weight: bold;
+  color: white;
+}
+.transaction > ul > li > div:last-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background-color: rgb(58,58,60);
+  padding: 8px;
+  box-sizing: border-box;
+  font-size: 14px;
+  min-width: 175px;
+}
+#search_transaction {
+  width: 1200px;
+  background-color: rgb(58,58,60);
+  border-radius: 8px;
+  height: 56px;
+  display: flex;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 30px;
+  padding-right: 30px;
+  box-sizing: border-box;
+  align-items: center;
+  gap: 8px;
+}
+#search_transaction > i {
+  color: white;
+}
+#search_transaction > input {
+  background-color: transparent;
+  border: 0;
+  height: 100%;
+  color: white;
+  font-size: 20px;
+  width: calc(100% - 28px);
+  outline: none;
+}
