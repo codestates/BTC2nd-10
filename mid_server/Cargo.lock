@@ -735,6 +735,7 @@ name = "mid_server"
 version = "1.0.0"
 dependencies = [
  "env_logger",
+ "lazy_static",
  "log",
  "reqwest",
  "rocket",
