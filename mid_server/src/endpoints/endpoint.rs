@@ -3,10 +3,10 @@ use rocket::tokio::sync::oneshot::{self};
 use rocket::{get, post, tokio, State};
 
 use crate::models::message::{
-    ClientUser, ErrorResponse, ErrorTypes, GetUserResponse, IndexerMessage, ManagedState,
-    RestErrorResponses, SuccessResponse, Transaction, UserCreate,
+    ClientUser, ErrorResponse, ErrorTypes, GetMyResponse, GetUserResponse, IndexerMessage,
+    ManagedState, RestErrorResponses, SuccessResponse, Transaction, UserCreate,
 };
-use crate::user::actor::{create_user, get_user};
+use crate::user::actor::{create_user, get_my, get_user};
 
 #[post("/", format = "json", data = "<body>")]
 pub async fn transaction_post(
@@ -166,3 +166,17 @@ pub async fn user_get(
     .unwrap()
 }
 
+#[get("/my/<access>")]
+pub async fn my_wallet(
+    state: &State<ManagedState>,
+    access: &str,
+) -> Result<Json<SuccessResponse<GetMyResponse>>, RestErrorResponses> {
+    log::debug!("hi get, {}", access);
+    tokio::spawn(get_my(
+        access.to_string(),
+        state.tx_user.clone(),
+        state.tx_indexer.clone(),
+    ))
+    .await
+    .unwrap()
+}

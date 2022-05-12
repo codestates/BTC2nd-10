@@ -70,10 +70,6 @@ module.exports = {
       });
     }
   },
-  login: async (req, res) => {
-    const { address, password } = req.body;
-    login(address, password, res);
-  },
   getBalance: async (req, res) => {
     let address = req.params.address;
     const resBalance = req.web3.utils.fromWei(

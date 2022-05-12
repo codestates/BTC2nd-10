@@ -22,6 +22,7 @@ pub enum UserMessage {
     NewUserCreated((SaveUser, ClientUser)),
     GetUser((Sender<UserMessage>, String)),
     GetUserResponse(Option<ClientUser>),
+    GetUserFromAccess((Sender<UserMessage>, String)),
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -39,15 +40,26 @@ impl UserCreate {
 #[serde(rename_all = "camelCase")]
 pub struct GetUserResponse {
     pub balance: String,
-    pub user: ClientUser,
+    pub user: String,
     pub txs: Vec<Transaction>,
 }
 impl GetUserResponse {
+    pub fn new(balance: String, user: String, txs: Vec<Transaction>) -> Self {
+        Self { balance, user, txs }
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetMyResponse {
+    pub balance: String,
+    pub user: ClientUser,
+    pub txs: Vec<Transaction>,
+}
+impl GetMyResponse {
     pub fn new(balance: String, user: ClientUser, txs: Vec<Transaction>) -> Self {
         Self { balance, user, txs }
     }
 }
-
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BalanceResponse {
