@@ -15,7 +15,7 @@ window.onload = function () {
                     let {address,pk,accessToken} = result
                     document.getElementById('address').innerText= address;
                     document.getElementById('primary_key').innerText = pk;
-                    document.getElementById('access_token').innerText = accessToken;
+                    // document.getElementById('access_token').innerText = accessToken;
                     document.querySelector('#create_wallet > div:last-child').style.display = 'flex';
                 },
                 complete: function () {}
