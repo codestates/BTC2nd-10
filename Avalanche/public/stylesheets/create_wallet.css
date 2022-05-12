@@ -1,0 +1,64 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    min-width: 1300px;
+    overflow: auto;
+    position: relative;
+}
+#create_wallet {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+}
+#create_wallet > div:first-child {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+#create_wallet > div:first-child > label {
+    font-weight: bold;
+    font-size: 35px;
+}
+#create_wallet > div:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    gap: 16px;
+}
+#create_wallet > div:nth-child(2) > input {
+    width: 60%;
+    height: 30px;
+    border-radius: 16px;
+    box-sizing: border-box;
+    padding: 16px;
+    font-size: 20px;
+}
+#create_wallet > div:nth-child(2) > button {
+    width: 100px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 20px;
+}
+#create_wallet > div:last-child {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#create_wallet > div:last-child > label {
+    font-size: 25px;
+    font-weight: bold;
+}
+#create_wallet > div:last-child > span {
+    color: red;
+}
