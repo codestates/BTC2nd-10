@@ -68,6 +68,18 @@ impl Indexer {
                             .unwrap();
                     }
                     IndexerMessage::GetToResponse(_) => unreachable!(),
+                    IndexerMessage::GetMy((tx_oneshot, tx_address)) => {
+                        let mut interest = Vec::new();
+                        for item in &self.received_data {
+                            if item.from == tx_address || item.to == tx_address {
+                                interest.push(item.clone());
+                            }
+                        }
+                        tx_oneshot
+                            .send(IndexerMessage::GetMyResponse(interest))
+                            .unwrap();
+                    }
+                    IndexerMessage::GetMyResponse(_) => unreachable!(),
                 },
                 None => {
                     // IGNORE OTHER MESSAGES

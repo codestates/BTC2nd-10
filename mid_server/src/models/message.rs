@@ -14,10 +14,14 @@ pub enum IndexerMessage {
     GetFromResponse(Vec<Transaction>),
     GetTo((Sender<IndexerMessage>, String)),
     GetToResponse(Vec<Transaction>),
+    GetMy((Sender<IndexerMessage>, String)),
+    GetMyResponse(Vec<Transaction>),
 }
 #[derive(Debug)]
 pub enum UserMessage {
-    NewUserCreated(SaveUser),
+    NewUserCreated((SaveUser, ClientUser)),
+    GetUser((Sender<UserMessage>, String)),
+    GetUserResponse(Option<ClientUser>),
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -31,6 +35,25 @@ impl UserCreate {
         }
     }
 }
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetUserResponse {
+    pub balance: String,
+    pub user: ClientUser,
+    pub txs: Vec<Transaction>,
+}
+impl GetUserResponse {
+    pub fn new(balance: String, user: ClientUser, txs: Vec<Transaction>) -> Self {
+        Self { balance, user, txs }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BalanceResponse {
+    pub balance: String,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct UserCreateResponse {

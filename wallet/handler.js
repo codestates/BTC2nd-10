@@ -1,6 +1,5 @@
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
-const { User, Tx } = require("./model.js");
 const makeSalt = (length) => {
   let result = "";
   const characters =

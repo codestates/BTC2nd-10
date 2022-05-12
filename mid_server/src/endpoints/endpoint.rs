@@ -3,10 +3,10 @@ use rocket::tokio::sync::oneshot::{self};
 use rocket::{get, post, tokio, State};
 
 use crate::models::message::{
-    ClientUser, ErrorResponse, ErrorTypes, IndexerMessage, ManagedState, RestErrorResponses,
-    SuccessResponse, Transaction, UserCreate,
+    ClientUser, ErrorResponse, ErrorTypes, GetUserResponse, IndexerMessage, ManagedState,
+    RestErrorResponses, SuccessResponse, Transaction, UserCreate,
 };
-use crate::user::actor::create_user;
+use crate::user::actor::{create_user, get_user};
 
 #[post("/", format = "json", data = "<body>")]
 pub async fn transaction_post(
@@ -46,6 +46,8 @@ pub async fn transaction_get(
             IndexerMessage::GetFromResponse(_) => unreachable!(),
             IndexerMessage::GetTo(_) => unreachable!(),
             IndexerMessage::GetToResponse(_) => unreachable!(),
+            IndexerMessage::GetMy(_) => unreachable!(),
+            IndexerMessage::GetMyResponse(_) => unreachable!(),
             IndexerMessage::GetResponse(data) => {
                 return Ok(Json(SuccessResponse { data }));
             }
@@ -80,6 +82,8 @@ pub async fn transaction_get_from(
             IndexerMessage::GetFromResponse(data) => {
                 return Ok(Json(SuccessResponse { data }));
             }
+            IndexerMessage::GetMy(_) => unreachable!(),
+            IndexerMessage::GetMyResponse(_) => unreachable!(),
             IndexerMessage::GetResponse(_) => unreachable!(),
             IndexerMessage::GetTo(_) => unreachable!(),
             IndexerMessage::GetToResponse(_) => unreachable!(),
@@ -113,6 +117,8 @@ pub async fn transaction_get_to(
             IndexerMessage::GetFromResponse(_) => unreachable!(),
             IndexerMessage::GetResponse(_) => unreachable!(),
             IndexerMessage::GetTo(_) => unreachable!(),
+            IndexerMessage::GetMy(_) => unreachable!(),
+            IndexerMessage::GetMyResponse(_) => unreachable!(),
             IndexerMessage::GetToResponse(data) => {
                 return Ok(Json(SuccessResponse { data }));
             }
@@ -146,7 +152,17 @@ pub async fn user_create(
 }
 
 #[get("/<address>")]
-pub async fn user_get(state: &State<ManagedState>, address: &str) -> String {
-    // log::debug!("hi to, {}", address);
-    "".to_string()
+pub async fn user_get(
+    state: &State<ManagedState>,
+    address: &str,
+) -> Result<Json<SuccessResponse<GetUserResponse>>, RestErrorResponses> {
+    log::debug!("hi get, {}", address);
+    tokio::spawn(get_user(
+        address.to_string(),
+        state.tx_user.clone(),
+        state.tx_indexer.clone(),
+    ))
+    .await
+    .unwrap()
 }
+
