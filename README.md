@@ -31,9 +31,12 @@
 #### Frontend
 
 - Java Script
+- HTML
+- CSS
 
 #### Backend
 
 - Java Script
+- Node
 - Rust
 - Docker
