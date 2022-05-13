@@ -37,6 +37,6 @@
 #### Backend
 
 - Java Script
-- Node
+- Node.js
 - Rust
 - Docker
